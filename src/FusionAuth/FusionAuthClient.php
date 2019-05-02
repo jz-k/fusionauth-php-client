@@ -1376,14 +1376,14 @@ class FusionAuthClient
   }
 
   /**
-   * Retrieves all of the members of a family for a particular User by User Id.
+   * Retrieves all of the families that a user belongs to, which could be an empty list.
    *
-   * @param string $userId The User's unique Id
+   * @param string $userId The User's id
    *
    * @return ClientResponse The ClientResponse.
    * @throws \Exception
    */
-  public function retrieveFamilyMembers($userId)
+  public function retrieveFamilies($userId)
   {
     return $this->start()->uri("/api/user/family")
         ->urlSegment($userId)
