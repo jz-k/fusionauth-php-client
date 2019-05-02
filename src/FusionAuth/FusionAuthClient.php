@@ -1376,6 +1376,38 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieves all of the members of a family for a particular User by User Id.
+   *
+   * @param string $userId The User's unique Id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveFamilyMembers($userId)
+  {
+    return $this->start()->uri("/api/user/family")
+        ->urlSegment($userId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves all of the members of a family by the unique Family Id.
+   *
+   * @param string $familyId The unique Id of the Family.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveFamilyMembersByFamilyId($familyId)
+  {
+    return $this->start()->uri("/api/user/family")
+        ->urlSegment($familyId)
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves the group for the given Id.
    *
    * @param string $groupId The Id of the group.
