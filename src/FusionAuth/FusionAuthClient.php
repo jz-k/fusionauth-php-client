@@ -1386,7 +1386,7 @@ class FusionAuthClient
   public function retrieveFamilies($userId)
   {
     return $this->start()->uri("/api/user/family")
-        ->urlSegment($userId)
+        ->urlParameter("userId", $userId)
         ->get()
         ->go();
   }
