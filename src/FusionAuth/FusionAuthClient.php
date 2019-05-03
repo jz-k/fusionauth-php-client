@@ -1291,6 +1291,38 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieve a single consents by id.
+   *
+   * @param string $consentId The consent id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveConsent($consentId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves all of the consents that a user has.
+   *
+   * @param string $userId The User's id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveConsents($userId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlParameter("userId", $userId)
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves the daily active user report between the two instants. If you specify an application id, it will only
    * return the daily active counts for that application.
    *
@@ -1376,7 +1408,7 @@ class FusionAuthClient
   }
 
   /**
-   * Retrieves all of the families that a user belongs to, which could be an empty list.
+   * Retrieves all of the families that a user belongs to.
    *
    * @param string $userId The User's id
    *
@@ -2131,6 +2163,22 @@ class FusionAuthClient
   }
 
   /**
+   * Revokes a single consent by id.
+   *
+   * @param string $consentId The Consent id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function revokeConsent($consentId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
+        ->delete()
+        ->go();
+  }
+
+  /**
    * Revokes a single refresh token, all tokens for a user or all tokens for an application. If you provide a user id
    * and an application id, this will delete all the refresh tokens for that user for that application.
    *
@@ -2333,6 +2381,24 @@ class FusionAuthClient
         ->urlSegment($applicationId)
         ->urlSegment("role")
         ->urlSegment($roleId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->put()
+        ->go();
+  }
+
+  /**
+   * Updates a single consent by id.
+   *
+   * @param string $consentId The Consent id
+   * @param array $request The request that contains the consent information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function updateConsent($consentId, $request)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
         ->bodyHandler(new JSONBodyHandler($request))
         ->put()
         ->go();
