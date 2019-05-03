@@ -1307,6 +1307,20 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieves all of the consent types
+   *
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveConsentTypes()
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves all of the consents that a user has.
    *
    * @param string $userId The User's id
