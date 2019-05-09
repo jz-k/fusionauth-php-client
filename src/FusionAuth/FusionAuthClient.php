@@ -1745,6 +1745,22 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieves all of the children for the given parent email address.
+   *
+   * @param string $parentEmail The email of the parent.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrievePendingChildren($parentEmail)
+  {
+    return $this->start()->uri("/api/user/family/pending")
+        ->urlParameter("parentEmail", $parentEmail)
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves the last number of login records.
    *
    * @param int $offset The initial record. e.g. 0 is the last login, 100 will be the 100th most recent login.
