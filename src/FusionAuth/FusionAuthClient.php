@@ -370,6 +370,24 @@ class FusionAuthClient
   }
 
   /**
+   * Creates a user consent type. You can optionally specify an Id for the consent type, if not provided one will be generated.
+   *
+   * @param string $consentTypeId (Optional) The Id for the consent type. If not provided a secure random UUID will be generated.
+   * @param array $request The request object that contains all of the information used to create the user consent type.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function createUserConsentType($consentTypeId, $request)
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->urlSegment($consentTypeId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->post()
+        ->go();
+  }
+
+  /**
    * Creates a webhook. You can optionally specify an Id for the webhook, if not provided one will be generated.
    *
    * @param string $webhookId (Optional) The Id for the webhook. If not provided a secure random UUID will be generated.
@@ -669,6 +687,22 @@ class FusionAuthClient
   {
     return $this->start()->uri("/api/user-action-reason")
         ->urlSegment($userActionReasonId)
+        ->delete()
+        ->go();
+  }
+
+  /**
+   * Deletes the user consent type for the given Id.
+   *
+   * @param string $consentTypeId The Id of the user consent type to delete.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function deleteUserConsentType($consentTypeId)
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->urlSegment($consentTypeId)
         ->delete()
         ->go();
   }
@@ -1286,52 +1320,6 @@ class FusionAuthClient
   {
     return $this->start()->uri("/api/system/audit-log")
         ->urlSegment($auditLogId)
-        ->get()
-        ->go();
-  }
-
-  /**
-   * Retrieve a single consents by id.
-   *
-   * @param string $consentId The consent id
-   *
-   * @return ClientResponse The ClientResponse.
-   * @throws \Exception
-   */
-  public function retrieveConsent($consentId)
-  {
-    return $this->start()->uri("/api/user/consent")
-        ->urlSegment($consentId)
-        ->get()
-        ->go();
-  }
-
-  /**
-   * Retrieves all of the consent types
-   *
-   *
-   * @return ClientResponse The ClientResponse.
-   * @throws \Exception
-   */
-  public function retrieveConsentTypes()
-  {
-    return $this->start()->uri("/api/user/consent/type")
-        ->get()
-        ->go();
-  }
-
-  /**
-   * Retrieves all of the consents that a user has.
-   *
-   * @param string $userId The User's id
-   *
-   * @return ClientResponse The ClientResponse.
-   * @throws \Exception
-   */
-  public function retrieveConsents($userId)
-  {
-    return $this->start()->uri("/api/user/consent")
-        ->urlParameter("userId", $userId)
         ->get()
         ->go();
   }
@@ -2065,6 +2053,68 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieve a single consents by id.
+   *
+   * @param string $consentId The consent id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveUserConsent($consentId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves the user consent type for the given Id.
+   *
+   * @param string $userConsentTypeId The Id of the user consent type.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveUserConsentType($userConsentTypeId)
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->urlSegment($userConsentTypeId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves all of the user consent types.
+   *
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveUserConsentTypes()
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves all of the consents that a user has.
+   *
+   * @param string $userId The User's id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveUserConsents($userId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlParameter("userId", $userId)
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves the login report between the two instants for a particular user by Id. If you specify an application id, it will only return the
    * login counts for that application.
    *
@@ -2177,22 +2227,6 @@ class FusionAuthClient
   }
 
   /**
-   * Revokes a single consent by id.
-   *
-   * @param string $consentId The Consent id
-   *
-   * @return ClientResponse The ClientResponse.
-   * @throws \Exception
-   */
-  public function revokeConsent($consentId)
-  {
-    return $this->start()->uri("/api/user/consent")
-        ->urlSegment($consentId)
-        ->delete()
-        ->go();
-  }
-
-  /**
    * Revokes a single refresh token, all tokens for a user or all tokens for an application. If you provide a user id
    * and an application id, this will delete all the refresh tokens for that user for that application.
    *
@@ -2209,6 +2243,22 @@ class FusionAuthClient
         ->urlParameter("token", $token)
         ->urlParameter("userId", $userId)
         ->urlParameter("applicationId", $applicationId)
+        ->delete()
+        ->go();
+  }
+
+  /**
+   * Revokes a single consent by Id.
+   *
+   * @param string $consentId The Consent Id
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function revokeUserConsent($consentId)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
         ->delete()
         ->go();
   }
@@ -2395,24 +2445,6 @@ class FusionAuthClient
         ->urlSegment($applicationId)
         ->urlSegment("role")
         ->urlSegment($roleId)
-        ->bodyHandler(new JSONBodyHandler($request))
-        ->put()
-        ->go();
-  }
-
-  /**
-   * Updates a single consent by id.
-   *
-   * @param string $consentId The Consent id
-   * @param array $request The request that contains the consent information.
-   *
-   * @return ClientResponse The ClientResponse.
-   * @throws \Exception
-   */
-  public function updateConsent($consentId, $request)
-  {
-    return $this->start()->uri("/api/user/consent")
-        ->urlSegment($consentId)
         ->bodyHandler(new JSONBodyHandler($request))
         ->put()
         ->go();
@@ -2625,6 +2657,42 @@ class FusionAuthClient
   {
     return $this->start()->uri("/api/user-action-reason")
         ->urlSegment($userActionReasonId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->put()
+        ->go();
+  }
+
+  /**
+   * Updates a single user consent by Id.
+   *
+   * @param string $consentId The Consent Id
+   * @param array $request The request that contains the user consent information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function updateUserConsent($consentId, $request)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($consentId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->put()
+        ->go();
+  }
+
+  /**
+   * Updates the consent type with the given Id.
+   *
+   * @param string $consentTypeId The Id of the consent type to update.
+   * @param array $request The request that contains all of the new user consent type information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function updateUserConsentType($consentTypeId, $request)
+  {
+    return $this->start()->uri("/api/user/consent/type")
+        ->urlSegment($consentTypeId)
         ->bodyHandler(new JSONBodyHandler($request))
         ->put()
         ->go();
