@@ -425,6 +425,24 @@ class FusionAuthClient
   }
 
   /**
+   * Creates a single User consent.
+   *
+   * @param string $userConsentId (Optional) The Id for the User consent. If not provided a secure random UUID will be generated.
+   * @param array $request The request that contains the user consent information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function createUserConsent($userConsentId, $request)
+  {
+    return $this->start()->uri("/api/user/consent")
+        ->urlSegment($userConsentId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->post()
+        ->go();
+  }
+
+  /**
    * Creates a webhook. You can optionally specify an Id for the webhook, if not provided one will be generated.
    *
    * @param string $webhookId (Optional) The Id for the webhook. If not provided a secure random UUID will be generated.
@@ -2319,17 +2337,17 @@ class FusionAuthClient
   }
 
   /**
-   * Revokes a single consent by Id.
+   * Revokes a single User consent by Id.
    *
-   * @param string $consentId The Consent Id
+   * @param string $userConsentId The User Consent Id
    *
    * @return ClientResponse The ClientResponse.
    * @throws \Exception
    */
-  public function revokeUserConsent($consentId)
+  public function revokeUserConsent($userConsentId)
   {
     return $this->start()->uri("/api/user/consent")
-        ->urlSegment($consentId)
+        ->urlSegment($userConsentId)
         ->delete()
         ->go();
   }
@@ -2768,18 +2786,18 @@ class FusionAuthClient
   }
 
   /**
-   * Updates a single user consent by Id.
+   * Updates a single User consent by Id.
    *
-   * @param string $consentId The Consent Id
+   * @param string $userConsentId The User Consent Id
    * @param array $request The request that contains the user consent information.
    *
    * @return ClientResponse The ClientResponse.
    * @throws \Exception
    */
-  public function updateUserConsent($consentId, $request)
+  public function updateUserConsent($userConsentId, $request)
   {
     return $this->start()->uri("/api/user/consent")
-        ->urlSegment($consentId)
+        ->urlSegment($userConsentId)
         ->bodyHandler(new JSONBodyHandler($request))
         ->put()
         ->go();
