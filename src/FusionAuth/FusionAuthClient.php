@@ -2385,6 +2385,22 @@ class FusionAuthClient
   }
 
   /**
+   * Searches the login records with the specified criteria and pagination.
+   *
+   * @param array $request The search criteria and pagination information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function searchLoginRecords($request)
+  {
+    return $this->start()->uri("/api/system/login/search")
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->post()
+        ->go();
+  }
+
+  /**
    * Retrieves the users for the given ids. If any id is invalid, it is ignored.
    *
    * @param array $ids The user ids to search for.
