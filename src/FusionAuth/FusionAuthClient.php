@@ -2394,7 +2394,7 @@ class FusionAuthClient
    */
   public function searchLoginRecords($request)
   {
-    return $this->start()->uri("/api/system/login/search")
+    return $this->start()->uri("/api/system/login-record/search")
         ->bodyHandler(new JSONBodyHandler($request))
         ->post()
         ->go();
