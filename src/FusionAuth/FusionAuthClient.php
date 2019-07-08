@@ -1667,19 +1667,33 @@ class FusionAuthClient
   }
 
   /**
-   * Retrieves the Public Key configured for verifying JSON Web Tokens (JWT) by the key Id. If the key Id is provided a
-   * single public key will be returned if one is found by that id. If the optional parameter key Id is not provided all
-   * public keys will be returned.
+   * Retrieves the Public Key configured for verifying JSON Web Tokens (JWT) by the key Id (kid).
    *
-   * @param string $keyId (Optional) The Id of the public key.
+   * @param string $keyId The Id of the public key (kid).
    *
    * @return ClientResponse The ClientResponse.
    * @throws \Exception
    */
-  public function retrieveJWTPublicKey($keyId = NULL)
+  public function retrieveJWTPublicKey($keyId)
   {
     return $this->start()->uri("/api/jwt/public-key")
-        ->urlSegment($keyId)
+        ->urlParameter("kid", $keyId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves the Public Key configured for verifying the JSON Web Tokens (JWT) issued by the Login API by the Application Id.
+   *
+   * @param string $applicationId The Id of the Application for which this key is used.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveJWTPublicKeyByApplicationId($applicationId)
+  {
+    return $this->start()->uri("/api/jwt/public-key")
+        ->urlParameter("applicationId", $applicationId)
         ->get()
         ->go();
   }
