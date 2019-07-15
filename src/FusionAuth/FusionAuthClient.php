@@ -1210,6 +1210,23 @@ class FusionAuthClient
   }
 
   /**
+   * Request a refresh of the User search index. This API is not generally necessary and the search index will become consistent in a
+   * reasonable amount of time. There may be scenarios where you may wish to manually request an index refresh. One example may be 
+   * if you are using the Search API or Delete Tenant API immediately following a User Create etc, you may wish to request a refresh to
+   *  ensure the index immediately current before making a query request to the search index.
+   *
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function refreshUserSearchIndex()
+  {
+    return $this->start()->uri("/api/user/search")
+        ->put()
+        ->go();
+  }
+
+  /**
    * Registers a user for an application. If you provide the User and the UserRegistration object on this request, it
    * will create the user as well as register them for the application. This is called a Full Registration. However, if
    * you only provide the UserRegistration object, then the user must already exist and they will be registered for the
