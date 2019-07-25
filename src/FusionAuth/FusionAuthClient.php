@@ -369,6 +369,24 @@ class FusionAuthClient
   }
 
   /**
+   * Creates a Theme. You can optionally specify an Id for the theme, if not provided one will be generated.
+   *
+   * @param string $themeId (Optional) The Id for the theme. If not provided a secure random UUID will be generated.
+   * @param array $request The request object that contains all of the information used to create the theme.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function createTheme($themeId, $request)
+  {
+    return $this->start()->uri("/api/theme")
+        ->urlSegment($themeId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->post()
+        ->go();
+  }
+
+  /**
    * Creates a user. You can optionally specify an Id for the user, if not provided one will be generated.
    *
    * @param string $userId (Optional) The Id for the user. If not provided a secure random UUID will be generated.
@@ -706,6 +724,22 @@ class FusionAuthClient
   {
     return $this->start()->uri("/api/tenant")
         ->urlSegment($tenantId)
+        ->delete()
+        ->go();
+  }
+
+  /**
+   * Deletes the theme for the given Id.
+   *
+   * @param string $themeId The Id of the theme to delete.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function deleteTheme($themeId)
+  {
+    return $this->start()->uri("/api/theme")
+        ->urlSegment($themeId)
         ->delete()
         ->go();
   }
@@ -2012,6 +2046,36 @@ class FusionAuthClient
   }
 
   /**
+   * Retrieves the theme for the given Id.
+   *
+   * @param string $themeId The Id of the theme.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveTheme($themeId)
+  {
+    return $this->start()->uri("/api/theme")
+        ->urlSegment($themeId)
+        ->get()
+        ->go();
+  }
+
+  /**
+   * Retrieves all of the themes.
+   *
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function retrieveThemes()
+  {
+    return $this->start()->uri("/api/theme")
+        ->get()
+        ->go();
+  }
+
+  /**
    * Retrieves the totals report. This contains all of the total counts for each application and the global registration
    * count.
    *
@@ -2773,6 +2837,24 @@ class FusionAuthClient
   {
     return $this->start()->uri("/api/tenant")
         ->urlSegment($tenantId)
+        ->bodyHandler(new JSONBodyHandler($request))
+        ->put()
+        ->go();
+  }
+
+  /**
+   * Updates the theme with the given Id.
+   *
+   * @param string $themeId The Id of the theme to update.
+   * @param array $request The request that contains all of the new theme information.
+   *
+   * @return ClientResponse The ClientResponse.
+   * @throws \Exception
+   */
+  public function updateTheme($themeId, $request)
+  {
+    return $this->start()->uri("/api/theme")
+        ->urlSegment($themeId)
         ->bodyHandler(new JSONBodyHandler($request))
         ->put()
         ->go();
